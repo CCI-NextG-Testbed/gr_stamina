@@ -1,0 +1,78 @@
+id: stamina_beam_mapper
+label: Beam Mapper
+category: '[STAMINA]'
+
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+parameters:
+- id: tx_mhu
+  label: TX MHU
+  dtype: string
+  default: 'MHU1'
+  options: ['MHU1', 'MHU2', 'Off']
+- id: rx_mhu
+  label: RX MHU
+  dtype: string
+  default: 'MHU2'
+  options: ['MHU1', 'MHU2', 'Off']
+- id: backoff
+  label: Backoff Duration
+  dtype: float
+  default: '1e-6'
+- id: pulse
+  label: Pulse Duration
+  dtype: float
+  default: '1e-6'
+- id: config_path
+  label: GPIO Config Path
+  dtype: file_open
+  default: "/home/user/gpio_map.json"
+- id: debug
+  label: Debug
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+
+asserts:
+- ${ (tx_mhu != rx_mhu) or (tx_mhu == 'Off') }
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)#
+
+inputs:
+# -   label: in
+    # dtype: complex
+    # vlen: 1
+-   domain: message
+    id: beam_id
+    optional: true
+
+outputs:
+- domain: message
+  id: gpio_cmd
+  optional: true
+
+templates:
+  imports: import stamina
+  make: |-
+    stamina.beam_mapper(
+      tx_mhu=${tx_mhu},
+      rx_mhu=${rx_mhu},
+      backoff=${backoff},
+      pulse=${pulse},
+      config_path=${config_path},
+      debug=${debug}
+    )
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

@@ -1,0 +1,36 @@
+id: stamina_rss_calc
+label: RSS Calculator
+category: '[STAMINA]'
+
+parameters:
+-   id: length
+    label: Length
+    dtype: int
+    default: '1000'
+    hide: none
+-   id: max_iter
+    label: Max Iter
+    dtype: int
+    default: '4000'
+    hide: none
+
+inputs:
+-   label: in
+    dtype: complex
+    vlen: 1
+
+outputs:
+-   label: rss_out
+    dtype: float
+    vlen: 1
+    optional: true
+
+templates:
+    imports: import stamina
+    make: stamina.rss_calc(${length}, ${max_iter})
+
+    callbacks:
+    - set_length(${ length })
+    - set_max_iter(${ max_iter })
+
+file_format: 1

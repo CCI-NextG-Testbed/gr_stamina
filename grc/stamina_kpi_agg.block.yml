@@ -1,0 +1,80 @@
+id: stamina_kpi_agg
+label: KPI Aggregator
+category: '[STAMINA]'
+
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#     * default
+parameters:
+-   id: type
+    label: IO Type
+    dtype: enum
+    options: [complex, float, int, short]
+    option_attributes:
+        fcn: [cc, ff, ii, ss]
+    hide: part
+
+-   id: beam_file
+    label: Beam Log File
+    dtype: string
+    default: "/home/joao/kpi_beam.log"
+-   id: meas_file
+    label: Measurement Log File
+    dtype: string
+    default: "/home/joao/kpi_meas.log"
+-   id: standalone
+    label: Standalone
+    dtype: bool
+    default: 'False'
+    options: ['True', 'False']
+
+-   id: meas_period
+    label: Measurement Period
+    dtype: float
+    default: '1e-3'
+    hide: none
+
+-   id: sensitivity
+    label: Sensitivity
+    dtype: float
+    default: '-40.0'
+    hide: none
+
+-   id: debug
+    label: Debug
+    dtype: bool
+    default: 'False'
+    options: ['True', 'False']
+
+inputs:
+
+-   label: trigger
+    domain: message
+    id: trigger
+    optional: true
+-   label: beam_id
+    domain: message
+    id: beam_id
+    optional: true
+-   label: kpi_in
+    dtype: ${ type }
+    vlen: 1
+    optional: true
+
+outputs:
+-   label: kpi_out
+    domain: message
+    id: kpi_out
+    optional: true
+
+templates:
+  imports: import stamina
+  make: stamina.kpi_agg(${beam_file}, ${meas_file}, ${standalone}, ${meas_period}, ${sensitivity}, ${debug})
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

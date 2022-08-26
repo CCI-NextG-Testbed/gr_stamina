@@ -1,0 +1,71 @@
+id: stamina_beam_sweep
+label: Beam Sweep
+category: '[STAMINA]'
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+parameters:
+-   id: standalone
+    label: Standalone
+    dtype: bool
+    default: 'False'
+    options: ['True', 'False']
+
+-   id: tx_iterable
+    label: TX Sweep Pattern
+    dtype: raw
+    default: '[32]'
+-   id: rx_iterable
+    label: RX Sweep Pattern
+    dtype: raw
+    default: '[32]'
+-   id: beam_period
+    label: Beam Period
+    default: '1'
+    dtype: float
+-   id: interval
+    label: IA Interval
+    dtype: float
+    default: '5.0'
+-   id: debug
+    label: Debug
+    dtype: bool
+    default: 'False'
+    options: ['True', 'False']
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+inputs:
+-   domain: message
+    id: sweep
+    optional: true
+
+
+outputs:
+
+-   domain: message
+    id: beam_id
+    optional: true
+-   domain: message
+    id: trigger
+    optional: true
+
+
+templates:
+  imports: import stamina
+  make: stamina.beam_sweep(${standalone}, ${tx_iterable}, ${rx_iterable}, ${beam_period}, ${interval}, ${debug})
+  callbacks:
+  - set_tx_iterable(${tx_iterable})
+  - set_rx_iterable(${rx_iterable})
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

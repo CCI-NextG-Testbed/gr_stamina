@@ -1,0 +1,26 @@
+{
+  "data_pins": {
+    "lower":  1,
+    "upper": 11
+  },
+  "id_range": {
+    "lower":  1,
+    "upper": 2
+  },
+  "mode_range": {
+    "lower":  3,
+    "upper": 4
+  },
+  "beam_range": {
+    "lower":  5,
+    "upper": 11
+  },
+  "radio_id": {
+    "1": 5,
+    "2": 6
+  },
+  "radio_mode": {
+    "1": 7,
+    "2": 8
+  }
+}
